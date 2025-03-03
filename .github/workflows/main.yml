@@ -1,0 +1,78 @@
+name: Trigger All Workflows
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '0 0 * * *'  # 12:00 AM
+    - cron: '34 0 * * *'  # 12:34 AM
+    - cron: '8 1 * * *'   # 1:08 AM
+    - cron: '42 1 * * *'  # 1:42 AM
+    - cron: '16 2 * * *'  # 2:16 AM
+    - cron: '50 2 * * *'  # 2:50 AM
+    - cron: '24 3 * * *'  # 3:24 AM
+    - cron: '58 3 * * *'  # 3:58 AM
+    - cron: '32 4 * * *'  # 4:32 AM
+    - cron: '6 5 * * *'   # 5:06 AM
+    - cron: '40 5 * * *'  # 5:40 AM
+    - cron: '14 6 * * *'  # 6:14 AM
+    - cron: '48 6 * * *'  # 6:48 AM
+    - cron: '22 7 * * *'  # 7:22 AM
+    - cron: '56 7 * * *'  # 7:56 AM
+    - cron: '30 8 * * *'  # 8:30 AM
+    - cron: '4 9 * * *'   # 9:04 AM
+    - cron: '38 9 * * *'  # 9:38 AM
+    - cron: '12 10 * * *' # 10:12 AM
+    - cron: '46 10 * * *' # 10:46 AM
+    - cron: '20 11 * * *' # 11:20 AM
+    - cron: '54 11 * * *' # 11:54 AM
+    - cron: '28 12 * * *' # 12:28 PM
+    - cron: '2 13 * * *'  # 1:02 PM
+    - cron: '36 13 * * *' # 1:36 PM
+    - cron: '10 14 * * *' # 2:10 PM
+    - cron: '44 14 * * *' # 2:44 PM
+    - cron: '18 15 * * *' # 3:18 PM
+    - cron: '52 15 * * *' # 3:52 PM
+    - cron: '26 16 * * *' # 4:26 PM
+    - cron: '0 17 * * *'  # 5:00 PM
+    - cron: '34 17 * * *' # 5:34 PM
+    - cron: '8 18 * * *'  # 6:08 PM
+    - cron: '42 18 * * *' # 6:42 PM
+    - cron: '16 19 * * *' # 7:16 PM
+    - cron: '50 19 * * *' # 7:50 PM
+    - cron: '24 20 * * *' # 8:24 PM
+    - cron: '58 20 * * *' # 8:58 PM
+    - cron: '32 21 * * *' # 9:32 PM
+    - cron: '6 22 * * *'  # 10:06 PM
+    - cron: '40 22 * * *' # 10:40 PM
+    - cron: '14 23 * * *' # 11:14 PM
+    - cron: '48 23 * * *' # 11:48 PM
+
+jobs:
+  trigger-workflows:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: [
+          'myvote1', 'myvote2', 'myvote3', 'myvote4', 'myvote5', 'myvote6', 'myvote7', 'myvote8', 'myvote9', 'myvote10',
+          'myvote11', 'myvote12', 'myvote13', 'myvote14', 'myvote15', 'myvote16', 'myvote17', 'myvote18', 'myvote19', 'myvote20',
+          'myvote21', 'myvote22', 'myvote23', 'myvote24', 'myvote25', 'myvote26', 'myvote27', 'myvote28', 'myvote29', 'myvote30',
+          'myvote31', 'myvote32', 'myvote33', 'myvote34', 'myvote35', 'myvote36', 'myvote37', 'myvote38', 'myvote39', 'myvote40',
+          'myvote41', 'myvote42', 'myvote43', 'myvote44', 'myvote45', 'myvote46'
+        ]  # Add all 46 repository names here
+    steps:
+      - name: Trigger Workflow in ${{ matrix.repo }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.REPO_PAT }}  # Use the PAT to trigger workflows
+          script: |
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: 'tobi-ramas',
+                repo: '${{ matrix.repo }}',
+                workflow_id: 'main.yml',
+                ref: 'main'
+              });
+              console.log(`Successfully triggered workflow in ${{ matrix.repo }}`);
+            } catch (error) {
+              console.error(`Failed to trigger workflow in ${{ matrix.repo }}: ${error.message}`);
+            }
