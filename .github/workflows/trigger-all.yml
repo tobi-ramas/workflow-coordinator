@@ -3,7 +3,7 @@ name: Trigger All Workflows
 on:
   workflow_dispatch:  # Allows manual triggering
   schedule:
-    - cron: '0 0 * * *'  # Optional: Run daily at midnight
+    - cron: '*/34 * * * *'  # Runs every 34 minutes
 
 jobs:
   trigger-workflows:
